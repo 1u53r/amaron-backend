@@ -1,31 +1,39 @@
-// pages/api/gps.js
-import clientPromise from "../../../lib/mongodb";
+import clientPromise from "@/lib/mongodb";
 
-export default async function handler(req, res) {
-  if (req.method === "POST") {
-    try {
-      const { latitude, longitude } = req.body;
+export async function POST(request) {
+  try {
+    const { latitude, longitude } = await request.json();
 
-      if (!latitude || !longitude) {
-        return res.status(400).json({ message: "Latitude and longitude are required" });
-      }
-
-      const client = await clientPromise;
-      const db = client.db("gpsDB"); // replace with your DB name
-      const collection = db.collection("locations"); // replace with your collection name
-
-      const result = await collection.insertOne({
-        latitude,
-        longitude,
-        createdAt: new Date(),
-      });
-
-      res.status(201).json({ message: "Coordinates saved!", data: result });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Internal Server Error" });
+    if (!latitude || !longitude) {
+      return new Response(
+        JSON.stringify({ message: "Latitude and longitude are required" }),
+        { status: 400 }
+      );
     }
-  } else {
-    res.status(405).json({ message: "Method not allowed" });
+
+    const client = await clientPromise;
+    const db = client.db("gpsDB");          // your database name
+    const collection = db.collection("locations");
+
+    const result = await collection.insertOne({
+      latitude,
+      longitude,
+      createdAt: new Date(),
+    });
+
+    return new Response(JSON.stringify({ message: "Coordinates saved!", data: result }), {
+      status: 201,
+    });
+  } catch (error) {
+    console.error(error);
+    return new Response(JSON.stringify({ message: "Internal Server Error" }), {
+      status: 500,
+    });
   }
+}
+
+export function GET() {
+  return new Response(JSON.stringify({ message: "GET not allowed" }), {
+    status: 405,
+  });
 }
