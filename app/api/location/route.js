@@ -1,4 +1,3 @@
-// app/api/location/route.js
 import clientPromise from "@/lib/mongodb";
 
 export async function POST(request) {
@@ -9,9 +8,8 @@ export async function POST(request) {
       return new Response(JSON.stringify({ message: "Invalid latitude/longitude" }), { status: 400 });
     }
 
-    // Only connect inside the function, NOT at top-level
-    const client = await clientPromise;
-    const db = client.db("gpsdb"); // database name
+    const client = await clientPromise;  // <--- await here, NOT at top level
+    const db = client.db("gpsdb");
     const collection = db.collection("location");
 
     const result = await collection.insertOne({
