@@ -9,13 +9,12 @@ export async function POST(request) {
       "Access-Control-Allow-Headers": "Content-Type",
     };
 
-    const { latitude, longitude } = await request.json();
+    const { latitude, longitude, accuracy, timestamp } = await request.json();
 
-    if (!latitude || !longitude) {
-      return new Response(
-        JSON.stringify({ message: "Latitude and longitude are required" }),
-        { status: 400 }
-      );
+
+    // Validate latitude/longitude
+    if (latitude == null || longitude == null) {
+      return new Response(JSON.stringify({ message: "Latitude and longitude are required" }), { status: 400, headers });
     }
 
     const client = await clientPromise;
@@ -25,6 +24,8 @@ export async function POST(request) {
     const result = await collection.insertOne({
       latitude,
       longitude,
+      accuracy: accuracy || null,
+      timestamp: timestamp || new Date().toISOString(),
       createdAt: new Date(),
     });
 
