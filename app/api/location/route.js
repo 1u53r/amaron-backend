@@ -12,8 +12,8 @@ export async function POST(request) {
     }
 
     const client = await clientPromise;
-    const db = client.db("gpsDB");          // your database name
-    const collection = db.collection("locations");
+    const db = client.db("gpsdb");          // your database name
+    const collection = db.collection("location");
 
     const result = await collection.insertOne({
       latitude,
