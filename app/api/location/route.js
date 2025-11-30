@@ -2,6 +2,13 @@ import clientPromise from "@/lib/mongodb";
 
 export async function POST(request) {
   try {
+    // CORS
+    const headers = {
+      "Access-Control-Allow-Origin": "https://amaron.vercel.app",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    };
+
     const { latitude, longitude } = await request.json();
 
     if (!latitude || !longitude) {
@@ -28,6 +35,9 @@ export async function POST(request) {
     console.error(error);
     return new Response(JSON.stringify({ message: "Internal Server Error" }), {
       status: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "https://amaron.vercel.app"        
+      }
     });
   }
 }
@@ -35,5 +45,17 @@ export async function POST(request) {
 export function GET() {
   return new Response(JSON.stringify({ message: "GET not allowed" }), {
     status: 405,
+  });
+}
+
+// Allow OPTIONS preflight
+export function OPTIONS() {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "https://amaron.vercel.app",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
   });
 }
