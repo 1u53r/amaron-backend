@@ -4,7 +4,7 @@ export async function POST(request) {
   try {
     // CORS
     const headers = {
-      "Access-Control-Allow-Origin": "https://amaron.vercel.app",
+      "Access-Control-Allow-Origin": "https://amaron-pi.vercel.app",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
     };
@@ -37,7 +37,7 @@ export async function POST(request) {
     return new Response(JSON.stringify({ message: "Internal Server Error" }), {
       status: 500,
       headers: {
-        "Access-Control-Allow-Origin": "https://amaron.vercel.app"        
+        "Access-Control-Allow-Origin": "https://amaron-pi.vercel.app"        
       }
     });
   }
@@ -54,7 +54,7 @@ export function OPTIONS() {
   return new Response(null, {
     status: 200,
     headers: {
-      "Access-Control-Allow-Origin": "https://amaron.vercel.app",
+      "Access-Control-Allow-Origin": "https://amaron-pi.vercel.app",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
     },
